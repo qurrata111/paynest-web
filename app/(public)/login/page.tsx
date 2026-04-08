@@ -1,10 +1,14 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { loginThunk } from "@/lib/redux/auth/authThunk";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
     email: z.string().email("Email tidak valid"),
@@ -12,7 +16,12 @@ const schema = z.object({
 });
 
 export default function LoginPage() {
-    const {
+    const route = useRouter();
+
+    const dispatch = useAppDispatch();
+    const { loading, error, isAuthenticated, isInitialized } = useAppSelector((state: any) => state.auth);
+
+     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
@@ -21,21 +30,19 @@ export default function LoginPage() {
     });
 
     const onSubmit = async (data: any) => {
-        const res = await fetch("/api/login", {
-            method: "POST",
-            body: JSON.stringify(data),
-        });
+        dispatch(
+            loginThunk(data)
+        );
+    }
 
-        if (!res.ok) {
-            alert("Login gagal");
-            return;
+    useEffect(() => {
+        if (isInitialized && isAuthenticated) {
+            route.push("/home");
         }
-
-        window.location.href = "/dashboard";
-    };
+    }, [isInitialized, isAuthenticated, route]);
 
     return (
-        <div className="flex flex-col flex-1 items-center justify-center font-mono bg-amber-300 text-black">
+        <div>
             <div className="text-xl font-semibold">Login</div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -69,11 +76,12 @@ export default function LoginPage() {
                 <Button
                     variant="default"
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={loading}
                     className="w-full bg-gray-700 text-white p-2"
                 >
-                    {isSubmitting ? "Loading..." : "Login"}
+                    {loading ? "Loading..." : "Login"}
                 </Button>
+                {error && <p className="text-red-500">{error}</p>}
             </form>
         </div>
     );
