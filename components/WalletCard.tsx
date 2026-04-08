@@ -52,7 +52,7 @@ const WalletCard = (props: WalletCardProps) => {
 
             {props.user?.wallet?.[0]?.is_frozen ? (
                 <div className="text-sm text-red-600">
-                    Your wallet is temporarily locked. Contact support.
+                    Your wallet is temporarily frozen. Contact support.
                 </div>
             ) : null}
 
