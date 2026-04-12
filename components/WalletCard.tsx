@@ -11,7 +11,7 @@ type WalletCardProps = {
 const WalletCard = (props: WalletCardProps) => {
     const [showBalance, setShowBalance] = useState<boolean>(false);
     return (
-        <Card className={`w-100 p-4 ${props.user?.wallet?.[0]?.is_frozen
+        <Card className={`p-4 ${props.user?.wallet?.[0]?.is_frozen
             ? "bg-gray-200 border border-gray-400"
             : "bg-yellow-100"
             }`}>
@@ -52,7 +52,7 @@ const WalletCard = (props: WalletCardProps) => {
 
             {props.user?.wallet?.[0]?.is_frozen ? (
                 <div className="text-sm text-red-600">
-                    Your wallet is temporarily locked. Contact support.
+                    Your wallet is temporarily frozen. Contact support.
                 </div>
             ) : null}
 

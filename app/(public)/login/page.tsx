@@ -7,13 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 const schema = z.object({
     email: z.string().email("Email tidak valid"),
     password: z.string().min(6, "Minimal 6 karakter"),
 });
+
+type FormValues = z.infer<typeof schema>;
+
 
 export default function LoginPage() {
     const route = useRouter();
@@ -21,13 +25,15 @@ export default function LoginPage() {
     const dispatch = useAppDispatch();
     const { loading, error, isAuthenticated, isInitialized } = useAppSelector((state: any) => state.auth);
 
-     const {
+    const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm({
+    } = useForm<FormValues>({
         resolver: zodResolver(schema),
     });
+
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const onSubmit = async (data: any) => {
         dispatch(
@@ -59,13 +65,26 @@ export default function LoginPage() {
                     )}
                 </div>
 
-                <div>
+                <div className="relative">
                     <Input
                         {...register("password")}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         className="w-full border p-2 bg-white"
                     />
+                    <Button
+                        className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                    >
+                        {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                    </Button>
                     {errors.password && (
                         <p className="text-red-500 text-sm">
                             {errors.password.message}

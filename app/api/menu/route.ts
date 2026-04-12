@@ -12,13 +12,12 @@ export async function GET(req: Request) {
 
     const page = searchParams.get("page") || "1";
     const limit = searchParams.get("limit") || "10";
-    const sort = searchParams.get("sort") || "created_at";
-    const order = searchParams.get("order") || "desc";
+    const sort = searchParams.get("sort") || "seq";
+    const order = searchParams.get("order") || "asc";
     const search = searchParams.get("search") || "";
-    const isFrozen = searchParams.get("is_frozen") || "";
 
 
-    const res = await api.get(`/admin/user?page=${page}&limit=${limit}&sort=${sort}&order=${order}&search=${search}&is_frozen=${isFrozen}`, {
+    const res = await api.get(`/menu?page=${page}&limit=${limit}&sort=${sort}&order=${order}&search=${search}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -30,7 +29,7 @@ export async function GET(req: Request) {
         return Response.json({
             data: null,
             status: false,
-            message: "Fail to get user",
+            message: "Fail to get menu",
             statusCode: 500,
         });
     }

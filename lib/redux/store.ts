@@ -1,13 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth/authSlice";
 import transferReducer from "./transfer/transferSlice";
-import userAdminReducer from "./admin/user/userSlice";
+import adminReducer from "./admin/adminSlice";
+import menuReducer from "./menu/menuSlice";
+import roleReducer from "./role/roleSlice";
+import userReducer from "./user/userSlice";
+
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     transfer: transferReducer,
-    user: userAdminReducer,
+    admin: adminReducer,
+    menu: menuReducer,
+    role: roleReducer,
+    user: userReducer,
   },
 });
 

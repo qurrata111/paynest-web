@@ -6,7 +6,7 @@ const getUserThunk = createAsyncThunk(
     async (pagination: any, { rejectWithValue }
     ) => {
         try {
-            const { page, limit, search, sort, is_frozen} = pagination;
+            const { page, limit, search, sort, is_frozen } = pagination;
             const res = await fetch(`/api/admin/user?page=${page}&limit=${limit}&search=${search}&sort=${sort}&is_frozen=${is_frozen}`, {
                 method: "GET",
                 headers: {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserThunk } from "./userThunk";
+import { getUserThunk } from "./adminThunk";
 
 const initialState = {
     loading: false,
@@ -20,7 +20,7 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        resetUsersState: (state) => {
+        resetState: (state) => {
             state.users = []
             state.loading = false;
             state.error = null;
@@ -56,7 +56,7 @@ const userSlice = createSlice({
 })
 
 export const {
-    resetUsersState,
+    resetState,
     setPage,
     setPaginationSearch,
     setPaginationIsFrozen,
