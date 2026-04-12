@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export async function POST(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { id } = await params;
@@ -32,10 +32,10 @@ export async function POST(
         return Response.json(data);
     } catch (error: any) {
         return Response.json({
-            data: error.response.data || null,
+            data: error.response?.data || null,
             status: false,
             message: error.message ?? "Fail to delete menu",
-            statusCode: error.response.code || 500,
+            statusCode: error.response?.code || 500,
         });
     }
 }
