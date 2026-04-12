@@ -36,26 +36,20 @@ const CreateTranserPage = () => {
 
     const { loading, created } = useSelector((state: any) => state.transfer);
 
-
     const onSubmit = async (data: any) => {
         const res = await dispatch(createTransferThunk(data));
-    }
-
-    useEffect(() => {
-        if (created) {
-            if (created.status) {
-                toast.success(created.message);
-                resetTransferState();
-                reset();
-            }
-
-            if (!created.status) {
-                toast.error(created.message);
-                return;
-
-            }
+        if (res.payload.status) {
+            resetTransferState();
+            reset();
+            toast.success(res.payload.message);
         }
-    }, [created])
+
+        if (!res.payload.status) {
+            toast.error(res.payload.message);
+            return;
+
+        }
+    }
 
     return (
         <div className=" p-2">
@@ -88,7 +82,7 @@ const CreateTranserPage = () => {
                 <Button
                     variant="default"
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || loading}
                     className="w-full bg-gray-700 text-white p-2"
                 >
                     {isSubmitting ? "Sending..." : "Send"}
