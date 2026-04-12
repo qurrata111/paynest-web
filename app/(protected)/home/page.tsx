@@ -19,13 +19,15 @@ export default function HomePage() {
 
   return (
     <div className="w-full h-full font-mono text-gray-800 bg-amber-300 text-black p-2">
-      <div className="grid grid-col-1">
-        <div className="text-xl p-2">
-          Welcome, <span className="font-semibold">{user?.name}</span>
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        <div>
+          <div className="text-xl p-2">
+            Welcome, <span className="font-semibold">{user?.name}</span>
+          </div>
+          <WalletCard
+            user={user}
+          />
         </div>
-        <WalletCard
-          user={user}
-        />
       </div>
     </div>
   );
