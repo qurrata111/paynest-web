@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/user/userSlice";
-import { getUserThunk } from "@/lib/redux/admin/user/userThunk";
+import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/adminSlice";
+import { getUserThunk } from "@/lib/redux/admin/adminThunk";
+// import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/user/userSlice";
+// import { getUserThunk } from "@/lib/redux/admin/user/userThunk";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { ArrowDown, ChevronDown, LockIcon, SearchIcon, UnlockIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,7 +20,7 @@ const AdminUserPage = () => {
     const route = useRouter();
     const dispatch = useAppDispatch();
 
-    const { loading, users, pagination } = useSelector((state: any) => state.user);
+    const { loading, users, pagination } = useSelector((state: any) => state.admin);
 
     const { page, limit, total } = pagination;
     const totalPages = Math.ceil(total / limit);

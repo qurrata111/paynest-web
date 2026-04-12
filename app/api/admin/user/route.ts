@@ -30,7 +30,7 @@ export async function GET(req: Request) {
         return Response.json({
             data: null,
             status: false,
-            message: "Fail to get transfer history",
+            message: "Fail to get user",
             statusCode: 500,
         });
     }
