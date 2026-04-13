@@ -94,6 +94,7 @@ const MenuPage = () => {
                         <TableHeader>
                             <TableRow className='hover:bg-transparent'>
                                 <TableHead className="font-bold text-black">Name</TableHead>
+                                <TableHead className="font-bold text-black">Parent</TableHead>
                                 <TableHead className="font-bold text-black w-0">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -102,6 +103,7 @@ const MenuPage = () => {
                                 return (
                                     <TableRow key={item.id} className='has-data-[state=checked]:bg-muted/50'>
                                         <TableCell>{item.name}</TableCell>
+                                        <TableCell>{item.parent?.name ?? ""}</TableCell>
                                         <TableCell className='flex items-center gap-1'>
                                             <Tooltip>
                                                 <TooltipTrigger render={
