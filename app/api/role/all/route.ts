@@ -8,7 +8,7 @@ export async function GET(req: Request) {
         return Response.json({ user: null }, { status: 401 });
     }
 
-    const res = await api.get(`/menu/all`, {
+    const res = await api.get(`/role/all`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
