@@ -109,101 +109,6 @@ export default function ProtectedLayout({ children }: any) {
                   </SidebarGroup>
                 )
               })}
-              {/* <SidebarGroup>
-                <SidebarGroupLabel></SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton >
-                        <a className="flex items-center gap-2 p-2">
-                          <WalletIcon />
-                          <span>Wallet</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton >
-                        <a className="flex items-center gap-2 p-2">
-                          <FolderIcon />
-                          <span>Transfer</span>
-                        </a>
-                      </SidebarMenuButton>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton href='/transfer/create'>
-                            Create
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton href='/transfer/history'>
-                            History
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      </SidebarMenuSub>
-
-
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-              {[RoleId.SUPERADMIN, RoleId.ADMIN].includes(roleId) ? (<>
-                <SidebarGroup>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton >
-                          <a className="flex items-center gap-2 p-2">
-                            <FolderArchiveIcon />
-                            <span>Admin</span>
-                          </a>
-                        </SidebarMenuButton>
-                        <SidebarMenuSub>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton href='/admin/user'>
-                              Users
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton>
-                              Top Up
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton>
-                              Freeze/Unfreeze
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        </SidebarMenuSub>
-
-
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-                <SidebarGroup>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton >
-                          <a className="flex items-center gap-2 p-2">
-                            <FolderArchiveIcon />
-                            <span>Menu</span>
-                          </a>
-                        </SidebarMenuButton>
-                        <SidebarMenuSub>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton href='/menu'>
-                              All
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-
-                        </SidebarMenuSub>
-
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-              </>) : null} */}
             </SidebarContent>
           </Sidebar>
           <div className='flex flex-1 flex-col'>
@@ -221,7 +126,6 @@ export default function ProtectedLayout({ children }: any) {
                       </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem >
-                      {/* <a href='/me/settings'> */}
                       Setting
                       {/* </a> */}
                     </DropdownMenuItem>

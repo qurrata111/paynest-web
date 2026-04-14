@@ -11,7 +11,8 @@ import { getUserThunk } from "@/lib/redux/admin/adminThunk";
 // import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/user/userSlice";
 // import { getUserThunk } from "@/lib/redux/admin/user/userThunk";
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { ArrowDown, ChevronDown, LockIcon, SearchIcon, UnlockIcon } from "lucide-react";
+import { ArrowDown, ChevronDown, Eye, LockIcon, SearchIcon, UnlockIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -61,10 +62,10 @@ const AdminUserPage = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align='start'>
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem className={"text-sm text-gray-500 "} onClick={() => dispatch(setPaginationIsFrozen("")) }>
+                                    <DropdownMenuItem className={"text-sm text-gray-500 "} onClick={() => dispatch(setPaginationIsFrozen(""))}>
                                         All
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className={"text-sm text-gray-500 "} onClick={() => dispatch(setPaginationIsFrozen("true")) }>
+                                    <DropdownMenuItem className={"text-sm text-gray-500 "} onClick={() => dispatch(setPaginationIsFrozen("true"))}>
                                         Frozen
                                     </DropdownMenuItem>
                                     <DropdownMenuItem className={"text-sm text-gray-500"} onClick={() => dispatch(setPaginationIsFrozen("false"))}>
@@ -92,6 +93,18 @@ const AdminUserPage = () => {
                                         <TableCell>{item.name}</TableCell>
                                         <TableCell>{item.uid}</TableCell>
                                         <TableCell className='flex items-center gap-1'>
+                                            <Tooltip>
+                                                <TooltipTrigger render={
+                                                    <Link href={`/admin/user/${item.id}/view`}>
+                                                        <Button variant='default' className='rounded-full bg-orange-400' aria-label={`product-${item.id}-edit`}>
+                                                            <Eye />
+                                                        </Button>
+                                                    </Link>
+                                                } />
+                                                <TooltipContent>
+                                                    View Details
+                                                </TooltipContent>
+                                            </Tooltip>
                                             <Tooltip>
                                                 <TooltipTrigger render={
                                                     wallet?.is_frozen === 1 ? (

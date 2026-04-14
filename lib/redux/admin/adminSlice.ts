@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserThunk } from "./adminThunk";
+import { freezeWalletThunk, getUserByIdThunk, getUserThunk, updateUserRoleThunk, updateUserThunk } from "./adminThunk";
 
 const initialState = {
     loading: false,
@@ -14,6 +14,7 @@ const initialState = {
         search: "",
         is_frozen: ""
     },
+    user: null,
 }
 
 const userSlice = createSlice({
@@ -24,6 +25,7 @@ const userSlice = createSlice({
             state.users = []
             state.loading = false;
             state.error = null;
+            state.user = null;
         },
         setPage: (state, action) => {
             state.pagination.page = action.payload;
@@ -49,6 +51,55 @@ const userSlice = createSlice({
                 state.pagination.page = data.page;
             })
             .addCase(getUserThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan";
+            })
+            .addCase(getUserByIdThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUserByIdThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.user = action.payload;
+            })
+            .addCase(getUserByIdThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan";
+            })
+            .addCase(updateUserThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateUserThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateUserThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan";
+            })
+            .addCase(freezeWalletThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(freezeWalletThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(freezeWalletThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan";
+            })
+            .addCase(updateUserRoleThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateUserRoleThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateUserRoleThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Terjadi kesalahan";
             })

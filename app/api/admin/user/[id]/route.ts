@@ -1,14 +1,19 @@
 import api from "@/lib/api";
 import { cookies } from "next/headers";
 
-export async function GET(req: Request) {
+export async function GET(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    const { id } = await params;
+
     const token = (await cookies()).get("token")?.value;
 
     if (!token) {
         return Response.json({ user: null }, { status: 401 });
     }
 
-    const res = await api.get(`/role/all`, {
+    const res = await api.get(`/admin/user/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -20,7 +25,7 @@ export async function GET(req: Request) {
         return Response.json({
             data: null,
             status: false,
-            message: "Fail to get menu",
+            message: "Fail to get user",
             statusCode: 500,
         });
     }

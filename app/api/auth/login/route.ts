@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     }
 
     const token = data.data.access_token;
+    const userRole = data.data.user_roles?.[0]?.role_id || "";;
 
     const response = NextResponse.json({
         user: data.data,
@@ -21,6 +22,13 @@ export async function POST(req: Request) {
         httpOnly: true,
         path: "/",
         secure: process.env.NODE_ENV === "production",
+    });
+
+    response.cookies.set("roleId", userRole, {
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
     });
 
     return response;

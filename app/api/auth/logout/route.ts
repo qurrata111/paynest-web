@@ -11,5 +11,13 @@ export async function POST(req: Request) {
         expires: new Date(0),
     });
 
+    response.cookies.set("roleId", "", {
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        expires: new Date(0),
+    });
+
     return response;
 }
