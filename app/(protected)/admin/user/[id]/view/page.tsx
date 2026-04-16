@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import WalletFormCard from "@/components/WalletFormCard";
-import { freezeWalletThunk, getUserByIdThunk, updateUserRoleThunk, updateUserThunk, } from "@/lib/redux/admin/adminThunk";
+import { freezeWalletThunk, getUserByIdThunk, topUpThunk, updateUserRoleThunk, updateUserThunk, } from "@/lib/redux/admin/adminThunk";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { getRoleAllThunk } from "@/lib/redux/role/roleThunk";
 import { getMyMenuThunk } from "@/lib/redux/user/userThunk";
@@ -30,6 +30,11 @@ const schemaUserRole = z.object({
 
 const schemaUserWallet = z.object({
     user_id: z.number().min(1, "User Id cannot be empty"),
+})
+
+const schemaTopUp = z.object({
+    user_id: z.number().min(1, "User Id cannot be empty"),
+    amount: z.number().min(1, "Amount cannot be empty"),
 })
 
 const ViewUserPage = () => {
@@ -75,6 +80,17 @@ const ViewUserPage = () => {
         getValues: getValuesWallet,
     } = useForm({
         resolver: zodResolver(schemaUserWallet),
+    })
+
+    const {
+        register: registerTopup,
+        handleSubmit: handleSubmitTopUp,
+        formState: { errors: errorsTopUp, isSubmitting: isSubmittingTopUp },
+        reset: resetTopUp,
+        setValue: setValueTopUp,
+        getValues: getValuesTopUp,
+    } = useForm({
+        resolver: zodResolver(schemaTopUp),
     })
 
     const onSubmit = async (data: any) => {
@@ -134,6 +150,23 @@ const ViewUserPage = () => {
         }
     }
 
+    const onSubmitTopup = async () => {
+        const data = getValuesTopUp();
+        const res = await dispatch(topUpThunk(data));
+
+        if (res.payload.status) {
+            resetTopUp();
+            getUserById();
+            toast.success(res.payload.message);
+        }
+
+        if (!res.payload.status) {
+            toast.error(res.payload.message);
+            return;
+
+        }
+    }
+
     useEffect(() => {
         if (updatedUser) {
             if (updatedUser.status) {
@@ -182,6 +215,7 @@ const ViewUserPage = () => {
             setValueRole("role_id", user?.data?.user_roles?.[0]?.role_id ?? null);
 
             setValueWallet("user_id", user?.data.id);
+            setValueTopUp("user_id", user?.data.id);
         }
     }, [user])
 
@@ -276,8 +310,8 @@ const ViewUserPage = () => {
                 </div>
             </div>
 
-            <div className="w-full flex justify-center">
-                <div className="">
+            <div className="w-full">
+                <div className="w-100">
                     <div className="text-xl text-left text-gray-800 font-semibold mb-4">Wallet</div>
 
                     <WalletFormCard
@@ -287,8 +321,36 @@ const ViewUserPage = () => {
                         handleFreeze={(type) => handleFreeze(type)}
                     />
                 </div>
+
+                <div className="mt-4">
+                    <div className="text-xl text-left text-gray-800 font-semibold mb-4">Top Up</div>
+                    <div className="p-4 bg-white rounded-md">
+                        <Input
+                            {...registerTopup("amount", { valueAsNumber: true })}
+                            placeholder="Amount"
+                            className="w-full p-2 bg-white disabled:bg-gray-50"
+                        />
+                        {errorsTopUp.amount && (
+                            <p className="text-red-500 text-sm">{errorsTopUp.amount.message}</p>
+
+                        )}
+                        <Button
+                            size={"sm"}
+                            variant={"default"}
+                            disabled={isSubmittingTopUp}
+                            className="bg-gray-700 text-white p-2 mt-4"
+                            onClick={onSubmitTopup}
+                        >
+                            {isSubmittingTopUp ? "Updating..." : "Top Up"}
+                        </Button>
+                    </div>
+
+                </div>
             </div>
-            <div></div>
+            <div>
+
+
+            </div>
         </div>
     )
 }

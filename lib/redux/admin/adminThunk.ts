@@ -144,10 +144,41 @@ const updateUserRoleThunk = createAsyncThunk(
     }
 )
 
+const topUpThunk = createAsyncThunk(
+    "admin/user/topup",
+    async (payload: {
+        user_id: number,
+        amount: number
+    }, { rejectWithValue }
+    ) => {
+        try {
+            const res = await fetch(`/api/admin/user/${payload.user_id}/topup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+             
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || "Topup gagal");
+            }
+
+            return data;
+        } catch (err: any) {
+            return rejectWithValue(err.message);
+        }
+    }
+)
+
 export {
     getUserThunk,
     getUserByIdThunk,
     updateUserThunk,
     freezeWalletThunk,
     updateUserRoleThunk,
+    topUpThunk,
 }
