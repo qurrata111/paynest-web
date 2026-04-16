@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -7,15 +8,16 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/adminSlice";
-import { getUserThunk } from "@/lib/redux/admin/adminThunk";
+import { freezeWalletThunk, getUserThunk } from "@/lib/redux/admin/adminThunk";
 // import { setPage, setPaginationIsFrozen, setPaginationSearch } from "@/lib/redux/admin/user/userSlice";
 // import { getUserThunk } from "@/lib/redux/admin/user/userThunk";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { ArrowDown, ChevronDown, Eye, LockIcon, SearchIcon, UnlockIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const AdminUserPage = () => {
     const route = useRouter();
@@ -34,6 +36,27 @@ const AdminUserPage = () => {
         dispatch(getUserThunk(pagination));
     }, [pagination.page, pagination.limit, pagination.search, pagination.sort, pagination.is_frozen]);
 
+    // HANDLE FREEZED ACCOUNT
+    const [show, setShow] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
+
+    const handleFreeze = async (userId: number, type: 1 | 0) => {
+        const res = await dispatch(
+            freezeWalletThunk({ id: userId, type, })
+        )
+
+        if (res.payload.status) {
+            dispatch(getUserThunk(pagination));
+            toast.success(res.payload.message);
+        }
+
+        if (!res.payload.status) {
+            toast.error(res.payload.message);
+            return;
+
+        }
+    }
+    // HANDLE FREEZED ACCOUNT
     return (
         <div className="font-mono">
             <div className="text-xl text-center font-semibold">Users</div>
@@ -96,7 +119,7 @@ const AdminUserPage = () => {
                                             <Tooltip>
                                                 <TooltipTrigger render={
                                                     <Link href={`/admin/user/${item.id}/view`}>
-                                                        <Button variant='default' className='rounded-full bg-orange-400' aria-label={`product-${item.id}-edit`}>
+                                                        <Button variant='default' className='rounded-full bg-orange-400' aria-label={`user-${item.id}-edit`}>
                                                             <Eye />
                                                         </Button>
                                                     </Link>
@@ -108,11 +131,11 @@ const AdminUserPage = () => {
                                             <Tooltip>
                                                 <TooltipTrigger render={
                                                     wallet?.is_frozen === 1 ? (
-                                                        <Button variant='default' className='rounded-full' aria-label={`product-${item.id}-edit`}>
+                                                        <Button onClick={() => { setShow(!show); setSelectedUser(item) }} variant='default' className='rounded-full' aria-label={`user-${item.id}-edit`}>
                                                             <LockIcon />
                                                         </Button>
                                                     ) : wallet?.is_frozen === 0 ? (
-                                                        <Button variant='default' className='rounded-full' aria-label={`product-${item.id}-edit`}>
+                                                        <Button onClick={() => { setShow(!show); setSelectedUser(item) }} variant='default' className='rounded-full' aria-label={`user-${item.id}-edit`}>
                                                             <UnlockIcon />
                                                         </Button>
                                                     ) : <div></div>
@@ -165,6 +188,26 @@ const AdminUserPage = () => {
                     </PaginationContent>
                 </Pagination>
             </div>
+
+            <AlertDialog
+                open={show} onOpenChange={() => setShow(!show)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{`Are you sure to ${selectedUser?.wallet?.[0]?.is_frozen ? "Unfreeze" : "Freeze"} ${selectedUser?.name}'s wallet`}?</AlertDialogTitle>
+                        <AlertDialogDescription className={"text-mono"}>
+                            This action cannot be undone
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setShow(false)}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => {
+                            handleFreeze(selectedUser?.id, selectedUser?.wallet?.[0]?.is_frozen ? 0 : 1);
+                            setShow(false);
+                        }}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div >
     )
 }
