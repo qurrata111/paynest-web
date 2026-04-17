@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { freezeWalletThunk, getUserByIdThunk, getUserThunk, updateUserRoleThunk, updateUserThunk } from "./adminThunk";
+import { freezeWalletThunk, getUserByIdThunk, getUserThunk, topUpThunk, updateUserRoleThunk, updateUserThunk } from "./adminThunk";
 
 const initialState = {
     loading: false,
@@ -100,6 +100,18 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateUserRoleThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan";
+            })
+            .addCase(topUpThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(topUpThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(topUpThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Terjadi kesalahan";
             })
